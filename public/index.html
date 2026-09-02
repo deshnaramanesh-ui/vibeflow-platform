@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibeFlow - Student Music Streaming & Focus Platform</title>
+  <meta name="description" content="VibeFlow is a student music streaming platform with Study Mix Pomodoro focus mode, 30-minute Star rewards, Spotify settings, and streak tracking dashboard." />
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Application Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div id="app-container">
+    <!-- Left Navigation Sidebar (Exact Match to Reference Screenshot) -->
+    <aside class="sidebar">
+      <div class="logo-container" id="logo-btn">
+        <span class="logo-text"><i class="fa-solid fa-music"></i> VibeFlow</span>
+      </div>
+
+      <nav class="nav-section">
+        <a href="#home" class="nav-link active" id="nav-home">
+          <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="#favorites" class="nav-link" id="nav-favorites">
+          <i class="fa-solid fa-heart" style="color: #ff4081;"></i> Favorites
+        </a>
+        <a href="#settings" class="nav-link" id="nav-settings">
+          <i class="fa-solid fa-gear"></i> Settings
+        </a>
+        <a href="#history" class="nav-link" id="nav-history">
+          <i class="fa-solid fa-headphones"></i> Recently Played
+        </a>
+        <a href="#studymix" class="nav-link" id="nav-studymix" style="color: #ff4081; margin-top: 6px;">
+          <i class="fa-solid fa-stopwatch"></i> Study Mix Focus
+        </a>
+      </nav>
+
+      <!-- Sidebar Student Daily Streak Card -->
+      <div class="sidebar-streak-card" id="sidebar-streak-card" title="Click to open Student Focus Dashboard">
+        <div class="streak-badge-title">Daily Study Goal</div>
+        <div class="streak-badge-content">
+          <div class="streak-days" id="sidebar-streak-days">🔥 0 Days</div>
+          <div class="today-stars-badge" id="sidebar-today-stars">⭐ 0 Stars</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Application Wrapper -->
+    <main class="main-wrapper">
+      <!-- Top Navigation Bar (Exact Match) -->
+      <header class="top-navbar">
+        <div class="search-container">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="Search all songs across categories (title, artist, genre)..."
+            autocomplete="off"
+          />
+          <!-- Real-Time Floating Search Results Dropdown -->
+          <div id="search-results-dropdown" class="search-dropdown">
+            <!-- Dynamic song search items -->
+          </div>
+        </div>
+
+        <div class="auth-actions" id="auth-actions">
+          <button class="btn btn-outline" id="btn-login">Login</button>
+          <button class="btn btn-primary" id="btn-register">Register</button>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Content -->
+      <div class="content-scroll">
+        <!-- Hero Welcome Banner (Exact Match) -->
+        <section class="hero-banner">
+          <h1 class="hero-title">Welcome to VibeFlow 🎵</h1>
+          <p class="hero-subtitle">
+            Discover playlists that match your mood, boost productivity, and help you relax.
+          </p>
+          <div class="hero-btn-group">
+            <button class="hero-btn" id="btn-explore">Explore Playlists</button>
+            <button class="hero-btn-secondary" id="btn-open-add-song"><i class="fa-solid fa-plus"></i> Add Custom Song</button>
+          </div>
+        </section>
+
+        <!-- Featured Playlists Section (Exact Match) -->
+        <section id="playlists-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="fa-solid fa-fire" style="color: #ff9800;"></i> Featured Playlists
+            </h2>
+            <span style="font-size: 13px; color: var(--text-dim);">Click any playlist to view all songs or add custom tracks</span>
+          </div>
+
+          <!-- Dynamic Grid for Study Mix, Relax Beat, Energy Boost, Sleep Sounds, Travel Tunes -->
+          <div class="playlists-grid" id="playlists-grid">
+            <!-- Populated via app.js -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Persistent Bottom Music Player -->
+    <footer class="music-player-bar">
+      <!-- Left Track Info -->
+      <div class="player-track-info">
+        <img src="assets/images/study_mix.jpg" alt="Now Playing" class="player-cover" id="player-cover" />
+        <div class="player-details">
+          <span class="player-title" id="player-title">Midnight Focus & Coffee</span>
+          <span class="player-artist" id="player-artist">Lofi Scholar</span>
+        </div>
+        <button class="player-heart-btn" id="player-heart-btn" title="Add to Favorites">
+          <i class="fa-solid fa-heart"></i>
+        </button>
+      </div>
+
+      <!-- Center Audio Controls & Scrubber -->
+      <div class="player-center-controls">
+        <div class="control-buttons">
+          <button class="ctrl-btn" id="btn-shuffle" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+          <button class="ctrl-btn" id="btn-prev-track" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="ctrl-btn ctrl-play" id="btn-play-toggle" title="Play / Pause">
+            <i class="fa-solid fa-play" style="margin-left: 2px;"></i>
+          </button>
+          <button class="ctrl-btn" id="btn-next-track" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+          <button class="ctrl-btn" id="btn-repeat" title="Repeat"><i class="fa-solid fa-repeat"></i></button>
+        </div>
+
+        <div class="progress-container">
+          <span class="time-label" id="current-time-label">00:00</span>
+          <div class="scrubber-bar" id="scrubber-bar">
+            <div class="scrubber-fill" id="scrubber-fill" style="width: 0%;"></div>
+          </div>
+          <span class="time-label" id="total-time-label">03:15</span>
+        </div>
+      </div>
+
+      <!-- Right Focus Timer Indicator & Volume -->
+      <div class="player-right-controls">
+        <div class="mini-focus-indicator" id="mini-focus-indicator" title="Study Mix Timer Active! Click to expand">
+          <i class="fa-solid fa-stopwatch" style="color: #ff007f;"></i>
+          <span id="mini-focus-time">30:00</span>
+        </div>
+
+        <div class="volume-container">
+          <i class="fa-solid fa-volume-high" style="color: var(--text-dim); font-size: 14px;"></i>
+          <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="80" />
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==========================================================================
+       MODALS
+       ========================================================================== -->
+
+  <!-- 1. Spotify-Style Settings Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-card settings-modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-gear" style="color: #ff007f;"></i> Spotify & Audio Settings</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="settings-form">
+        <!-- Audio Quality Section -->
+        <div class="settings-section">
+          <div class="settings-section-title"><i class="fa-solid fa-sliders"></i> Audio Quality & Equalizer</div>
+          
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Streaming Audio Quality</div>
+              <div class="settings-row-desc">High quality uses more bandwidth but provides rich sound.</div>
+            </div>
+            <select class="form-select" id="set-audio-quality" style="width: 190px;">
+              <option value="Auto (Adaptive)">Auto (Adaptive)</option>
+              <option value="Normal (96kbps)">Normal (96kbps)</option>
+              <option value="High (160kbps)">High (160kbps)</option>
+              <option value="Very High (320kbps)" selected>Very High (320kbps)</option>
+            </select>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Equalizer Preset</div>
+              <div class="settings-row-desc">Calibrate acoustic frequencies for studying or workouts.</div>
+            </div>
+            <select class="form-select" id="set-equalizer" style="width: 190px;">
+              <option value="Flat">Flat</option>
+              <option value="Lo-Fi Chill" selected>Lo-Fi Chill (Boost Lows/Highs)</option>
+              <option value="Bass Booster">Bass Booster (Gym)</option>
+              <option value="Acoustic / Vocal">Acoustic / Vocal</option>
+              <option value="Classical Study">Classical Study</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Playback Section -->
+        <div class="settings-section">
+          <div class="settings-section-title"><i class="fa-solid fa-play"></i> Playback & Transitions</div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Crossfade Songs</div>
+              <div class="settings-row-desc">Allows seamless fading between study tracks.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="range" id="set-crossfade" min="0" max="12" value="4" style="width: 110px; accent-color: var(--primary-pink);" />
+              <span id="crossfade-val-lbl" style="font-size: 13px; font-weight: 700; color: #ffffff; width: 28px;">4s</span>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Gapless Playback</div>
+              <div class="settings-row-desc">Eliminates silence between consecutive tracks.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-gapless" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Student Study & Focus Section -->
+        <div class="settings-section">
+          <div class="settings-section-title"><i class="fa-solid fa-graduation-cap"></i> Student Study Mix & Pomodoro</div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Daily Star Goal</div>
+              <div class="settings-row-desc">How many stars you aim to collect each day.</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="range" id="set-star-goal" min="1" max="10" value="5" style="width: 110px; accent-color: #ffd700;" />
+              <span id="star-goal-val-lbl" style="font-size: 13px; font-weight: 700; color: #ffd700; width: 36px;">5 ⭐</span>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Auto-Pause on Timer Finish</div>
+              <div class="settings-row-desc">Automatically pause music when the 30-min timer finishes.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-autopause" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Star Reward Sound Chime</div>
+              <div class="settings-row-desc">Play celebration audio when you earn +1 Star.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-chime" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Account, Email & Password Credentials Section -->
+        <div class="settings-section">
+          <div class="settings-section-title"><i class="fa-solid fa-user-gear"></i> Account, Email & Password Settings</div>
+          
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Student Username</label>
+            <input type="text" class="form-input" id="set-account-username" placeholder="e.g. alex_student" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="set-account-email" placeholder="e.g. alex@student.edu" required />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label">Change Password (leave blank to keep current)</label>
+            <div style="position: relative;">
+              <input type="password" class="form-input" id="set-account-password" placeholder="Enter new password (min. 6 chars)" />
+              <button type="button" class="btn-toggle-pwd" id="btn-toggle-set-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-dim); cursor: pointer;">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button type="button" class="btn btn-outline" id="btn-settings-logout" style="flex: 1; border-color: #ff1744; color: #ff5252;">
+              <i class="fa-solid fa-right-from-bracket"></i> Log Out
+            </button>
+            <button type="button" class="btn btn-outline" id="btn-settings-switch-auth" style="flex: 1;">
+              <i class="fa-solid fa-user-plus"></i> Switch / Sign In
+            </button>
+          </div>
+        </div>
+
+        <!-- Social & Privacy -->
+        <div class="settings-section">
+          <div class="settings-section-title"><i class="fa-solid fa-user-shield"></i> Privacy & Activity</div>
+
+          <div class="settings-row">
+            <div class="settings-row-text">
+              <div class="settings-row-title">Private Session</div>
+              <div class="settings-row-desc">Listen anonymously without sharing streak status.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="set-private" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 14px; font-size: 15px;">
+          <i class="fa-solid fa-floppy-disk"></i> Save Settings & Update Account
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Recently Played Modal -->
+  <div class="modal-overlay" id="recently-played-modal">
+    <div class="modal-card tracklist-modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-headphones" style="color: #ff007f;"></i> Recently Played Tracks</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="recently-played-list" style="max-height: 480px; overflow-y: auto;">
+        <!-- Dynamic list of recently played tracks -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Liked / Favorite Songs Modal -->
+  <div class="modal-overlay" id="favorites-modal">
+    <div class="modal-card tracklist-modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-heart" style="color: #ff007f;"></i> Liked Songs</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="playlist-detail-header" style="background: linear-gradient(135deg, rgba(255, 0, 127, 0.25) 0%, rgba(142, 36, 170, 0.15) 100%); border-radius: var(--radius-md); padding: 18px; margin-bottom: 20px;">
+        <div class="liked-songs-hero-art">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <div class="playlist-detail-meta">
+          <span class="badge-genre" style="background: rgba(255,0,127,0.3); border-color: var(--primary-pink);">Your Favorites Library</span>
+          <h2>Liked Songs</h2>
+          <p>Your curated collection of favorite tracks. Click the ❤️ heart icon on any song across the platform to add or remove it.</p>
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 10px;">
+            <button class="btn btn-primary" id="btn-play-all-favorites"><i class="fa-solid fa-play"></i> Play Liked Songs</button>
+            <span style="font-size: 13px; color: var(--text-dim);" id="favorites-count-label">0 songs</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-height: 340px; overflow-y: auto;">
+        <table class="track-table">
+          <thead>
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Title & Artist</th>
+              <th>Album</th>
+              <th>Genre</th>
+              <th>Duration</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="favorites-tracks-tbody">
+            <!-- Dynamic liked songs -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Playlist Tracklist Detail Modal (View all songs under category) -->
+  <div class="modal-overlay" id="playlist-detail-modal">
+    <div class="modal-card tracklist-modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="detail-category-badge"><i class="fa-solid fa-compact-disc" style="color: #ff007f;"></i> Playlist Details</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="playlist-detail-header">
+        <img src="assets/images/study_mix.jpg" id="detail-cover" class="playlist-detail-cover" alt="cover" />
+        <div class="playlist-detail-meta">
+          <span class="badge-genre" id="detail-category">Study</span>
+          <h2 id="detail-title">Study Mix</h2>
+          <p id="detail-desc">Focus mode active! Soft lo-fi beats.</p>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <button class="btn btn-primary" id="btn-detail-play-all"><i class="fa-solid fa-play"></i> Play Playlist</button>
+            <button class="btn btn-outline" id="btn-detail-add-song"><i class="fa-solid fa-plus"></i> Add Song to this Category</button>
+            <span style="font-size: 13px; color: var(--text-dim);" id="detail-count">5 songs</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-height: 340px; overflow-y: auto;">
+        <table class="track-table">
+          <thead>
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>Title & Artist</th>
+              <th>Album</th>
+              <th>Genre</th>
+              <th>Duration</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="playlist-tracks-tbody">
+            <!-- Dynamic tracks -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Add Custom Song Modal (Add songs to any category) -->
+  <div class="modal-overlay" id="add-song-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-music" style="color: #ff007f;"></i> Add Song to Category</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="add-song-form">
+        <div class="form-group">
+          <label class="form-label">Category / Playlist</label>
+          <select class="form-select" id="add-song-category-select">
+            <!-- Populated via app.js with Study Mix, Relax Beat, Energy Boost, Sleep Sounds, Travel Tunes -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Song Title</label>
+          <input type="text" class="form-input" id="add-song-title" placeholder="e.g. Rainy Lo-Fi Dreams" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Artist Name</label>
+          <input type="text" class="form-input" id="add-song-artist" placeholder="e.g. Student Producer" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Album Name (Optional)</label>
+          <input type="text" class="form-input" id="add-song-album" placeholder="e.g. Midnight Vibe Vol. 2" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><i class="fa-brands fa-youtube" style="color: #ff007f;"></i> Audio URL or YouTube Link</label>
+          <input type="text" class="form-input" id="add-song-url" placeholder="Paste YouTube link (e.g. https://www.youtube.com/watch?v=...) or direct MP3" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><i class="fa-solid fa-clock" style="color: #ff007f;"></i> Duration (Optional, e.g. 3:45)</label>
+          <input type="text" class="form-input" id="add-song-duration" placeholder="e.g. 3:45 or 225 (auto-detected if blank)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; margin-top: 10px; font-size: 15px;">
+          <i class="fa-solid fa-plus"></i> Add Song to Playlist
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Study Mix 30-Min Focus Mode Modal -->
+  <div class="modal-overlay" id="focus-timer-modal">
+    <div class="modal-card focus-modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-headphones" style="color: #ff007f;"></i> Study Mix - Focus Mode</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
+        Listen to soft lo-fi beats while studying. For every <strong>30 minutes</strong> of focus, you will earn <strong>+1 ⭐ Star</strong>!
+      </p>
+
+      <!-- Preset Modes -->
+      <div class="preset-modes-wrap">
+        <button class="mode-chip active" data-mins="30">30 Min Focus (1 ⭐)</button>
+        <button class="mode-chip" data-mins="50">50 Min Deep Study (2 ⭐)</button>
+        <button class="mode-chip" data-mins="25">25 Min Pomodoro (1 ⭐)</button>
+        <button class="mode-chip demo-chip" data-mins="0.083" title="5-second timer for instant grading / presentation demo!">⚡ 5s Fast Demo Mode</button>
+      </div>
+
+      <!-- Circular SVG Countdown Ring -->
+      <div class="timer-container">
+        <svg class="timer-svg" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff007f" />
+              <stop offset="50%" stop-color="#d81b60" />
+              <stop offset="100%" stop-color="#8e24aa" />
+            </linearGradient>
+          </defs>
+          <circle class="timer-circle-bg" cx="120" cy="120" r="110" />
+          <circle class="timer-circle-progress" id="timer-progress-ring" cx="120" cy="120" r="110" />
+        </svg>
+
+        <div class="timer-center-text">
+          <div class="timer-digits" id="timer-digits">30:00</div>
+          <div class="timer-label">Deep Focus</div>
+        </div>
+      </div>
+
+      <!-- Timer Action Buttons -->
+      <div class="timer-action-buttons">
+        <button class="btn btn-primary btn-timer-primary" id="btn-timer-toggle">
+          <i class="fa-solid fa-play"></i> Start 30-Min Focus
+        </button>
+        <button class="btn btn-timer-secondary" id="btn-timer-reset">
+          <i class="fa-solid fa-rotate-left"></i> Reset
+        </button>
+        <button class="btn btn-timer-secondary" id="btn-timer-claim" style="border-color: #ffd700; color: #ffd700;" title="Instantly complete session and claim star">
+          <i class="fa-solid fa-star"></i> Claim Star
+        </button>
+      </div>
+
+      <div class="focus-reward-info">
+        <span>Active Track: <strong>Midnight Focus & Coffee</strong></span>
+        <span class="focus-reward-stars"><i class="fa-solid fa-award"></i> Reward: +1 ⭐ Star</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Star Celebration Reward Pop-up Modal -->
+  <div class="modal-overlay" id="star-celebration-modal">
+    <div class="modal-card star-celebration-card">
+      <div class="star-icon-burst">⭐</div>
+      <h2 class="celebration-title">Study Milestone Completed!</h2>
+      <p class="celebration-subtitle" id="earned-stars-count">+1 ⭐ Star Earned!</p>
+
+      <div class="reward-metrics-row">
+        <div class="reward-metric-box">
+          <div class="reward-metric-val" id="celebration-streak-val">🔥 5 Days</div>
+          <div class="reward-metric-lbl">Daily Streak</div>
+        </div>
+        <div class="reward-metric-box">
+          <div class="reward-metric-val" id="celebration-today-stars">⭐ 4 Today</div>
+          <div class="reward-metric-lbl">Stars Today</div>
+        </div>
+        <div class="reward-metric-box">
+          <div class="reward-metric-val" style="color: #b388ff;">+50 XP</div>
+          <div class="reward-metric-lbl">Focus Points</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-modal-close" style="width: 100%; padding: 12px; font-size: 15px;">
+        Awesome! Keep Vibing 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- 7. Student Analytics & Star Streak Dashboard Modal -->
+  <div class="modal-overlay" id="dashboard-modal">
+    <div class="modal-card dashboard-modal-card">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-chart-line" style="color: #ff007f;"></i> Student Focus & Streak Dashboard</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-card-icon" style="color: #ffd700;">⭐</div>
+          <div class="dash-card-val" id="dash-today-stars">⭐ 3</div>
+          <div class="dash-card-lbl">Stars Today</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon" style="color: #ff9800;">🔥</div>
+          <div class="dash-card-val" id="dash-streak">🔥 4 Days</div>
+          <div class="dash-card-lbl">Active Streak</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon" style="color: #00e676;">⏱️</div>
+          <div class="dash-card-val" id="dash-total-focus">420m</div>
+          <div class="dash-card-lbl">Total Focus Time</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon" style="color: #e040fb;">🌟</div>
+          <div class="dash-card-val" id="dash-total-stars">🌟 14</div>
+          <div class="dash-card-lbl">Lifetime Stars</div>
+        </div>
+      </div>
+
+      <!-- Weekly Activity Chart -->
+      <div class="weekly-chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Weekly Focus Hours & Stars Earned</div>
+          <span style="font-size: 12px; color: var(--text-dim);">Last 7 Days</span>
+        </div>
+        <div class="chart-bars" id="dash-chart-bars">
+          <!-- Dynamic bars rendered via dashboard.js -->
+        </div>
+      </div>
+
+      <!-- Badges Showcase -->
+      <div class="badges-container">
+        <div class="chart-title">🏆 Unlocked Student Badges</div>
+        <div class="badges-grid" id="dash-badges-grid">
+          <!-- Dynamic Badges -->
+        </div>
+      </div>
+
+      <!-- Reset / Fresh Start Controls -->
+      <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,0,127,0.15); padding-top: 14px;">
+        <span style="font-size: 12px; color: var(--text-dim);">Earn +1 ⭐ Star every 30 mins of Study Mix.</span>
+        <button type="button" class="btn btn-outline" id="btn-reset-stars" style="font-size: 12px; padding: 6px 14px;">
+          <i class="fa-solid fa-rotate-left"></i> Reset Stars & Streak to 0
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Auth Modal (Login / Sign Up / Switch) -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="auth-modal-title"><i class="fa-solid fa-user-lock" style="color: #ff007f;"></i> Student Portal</div>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Auth Tab Switcher -->
+      <div style="display: flex; gap: 8px; margin-bottom: 20px; background: #0e071a; padding: 4px; border-radius: var(--radius-pill); border: 1px solid rgba(255,0,127,0.25);">
+        <button type="button" id="auth-tab-login" class="btn" style="flex: 1; padding: 8px; border-radius: var(--radius-pill); background: var(--primary-magenta); color: #ffffff;">Log In</button>
+        <button type="button" id="auth-tab-register" class="btn btn-outline" style="flex: 1; padding: 8px; border-radius: var(--radius-pill); border: none;">Sign Up</button>
+      </div>
+
+      <form id="auth-form">
+        <div class="form-group" id="auth-username-group" style="display: none;">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-input" id="auth-username" placeholder="e.g. alex_student" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Student Email</label>
+          <input type="email" class="form-input" id="auth-email" value="alex@student.edu" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div style="position: relative;">
+            <input type="password" class="form-input" id="auth-password" value="password123" required />
+            <button type="button" id="btn-toggle-auth-pwd" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-dim); cursor: pointer;">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="auth-submit-btn" style="width: 100%; padding: 12px; margin-top: 8px;">
+          Log In
+        </button>
+      </form>
+
+      <div style="margin-top: 18px; text-align: center; border-top: 1px solid rgba(255,0,127,0.2); padding-top: 14px;">
+        <button type="button" class="btn btn-outline" id="btn-demo-login" style="font-size: 12px; width: 100%;">
+          ⚡ Quick 1-Click Demo Login (Alex)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notification" id="toast-notification">
+    <i class="fa-solid fa-circle-check" style="color: #00e676; font-size: 18px;"></i>
+    <span id="toast-message">Notification message</span>
+  </div>
+
+  <!-- Hidden YouTube Audio Streaming Container -->
+  <div id="youtube-player-container" style="position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;">
+    <div id="youtube-iframe-target"></div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="js/api.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

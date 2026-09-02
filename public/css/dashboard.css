@@ -1,0 +1,387 @@
+/* ==========================================================================
+   VibeFlow - Student Study Mix Focus & Star Gamification Dashboard
+   ========================================================================== */
+
+/* Study Mix Focus Mode Modal */
+.focus-modal-card {
+  max-width: 620px;
+  background: linear-gradient(160deg, #180c2b 0%, #0d0617 100%);
+  border: 1px solid rgba(255, 0, 127, 0.4);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.focus-modal-card::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(233, 30, 99, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Circular Timer Display */
+.timer-container {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  margin: 20px auto 28px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-circle-bg {
+  fill: none;
+  stroke: #25143d;
+  stroke-width: 8;
+}
+
+.timer-circle-progress {
+  fill: none;
+  stroke: url(#timerGradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 690;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-center-text {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-digits {
+  font-size: 44px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -1px;
+  text-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+}
+
+.timer-label {
+  font-size: 13px;
+  color: var(--primary-pink);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* Preset Buttons */
+.preset-modes-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.mode-chip {
+  background: #201138;
+  border: 1px solid rgba(255, 0, 127, 0.3);
+  color: var(--text-muted);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.mode-chip:hover,
+.mode-chip.active {
+  background: var(--primary-magenta);
+  color: #ffffff;
+  border-color: var(--primary-neon);
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
+}
+
+.mode-chip.demo-chip {
+  background: #38122c;
+  border-color: #ff9800;
+  color: #ffb74d;
+}
+
+.mode-chip.demo-chip:hover {
+  background: #ff9800;
+  color: #000000;
+}
+
+/* Focus Action Controls */
+.timer-action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.btn-timer-primary {
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+}
+
+.btn-timer-secondary {
+  padding: 12px 24px;
+  background: #1c0e33;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-pill);
+}
+
+.btn-timer-secondary:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+/* Focus Reward Info Banner */
+.focus-reward-info {
+  background: rgba(255, 0, 127, 0.08);
+  border: 1px dashed rgba(255, 0, 127, 0.35);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #f1e6ff;
+}
+
+.focus-reward-stars {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffd700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   Star Reward Celebration Pop-up
+   ========================================================================== */
+.star-celebration-card {
+  max-width: 440px;
+  text-align: center;
+  background: linear-gradient(145deg, #240d3a 0%, #11051f 100%);
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.3), 0 0 20px rgba(255, 0, 127, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.star-icon-burst {
+  font-size: 72px;
+  margin: 10px auto;
+  display: inline-block;
+  animation: star-bounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
+  filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8));
+}
+
+@keyframes star-bounce {
+  0% { transform: scale(0.9) rotate(-5deg); }
+  100% { transform: scale(1.15) rotate(8deg); }
+}
+
+.celebration-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.celebration-subtitle {
+  font-size: 15px;
+  color: #e2d3f7;
+  margin-bottom: 20px;
+}
+
+.reward-metrics-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.reward-metric-box {
+  background: #19092d;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+}
+
+.reward-metric-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.reward-metric-lbl {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Student Analytics & Streak Dashboard Modal
+   ========================================================================== */
+.dashboard-modal-card {
+  max-width: 780px;
+  width: 95%;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dash-card {
+  background: #170d2b;
+  border: 1px solid rgba(255, 0, 127, 0.2);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.dash-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-neon);
+  box-shadow: 0 4px 15px rgba(255, 0, 127, 0.15);
+}
+
+.dash-card-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.dash-card-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.dash-card-lbl {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Weekly Chart */
+.weekly-chart-box {
+  background: #170d2b;
+  border: 1px solid rgba(255, 0, 127, 0.2);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.chart-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 120px;
+  padding-top: 20px;
+  border-bottom: 1px solid #2d184a;
+}
+
+.chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.bar-fill {
+  width: 24px;
+  background: linear-gradient(180deg, #ff007f 0%, #8e24aa 100%);
+  border-radius: 6px 6px 0 0;
+  transition: height 0.6s ease;
+  min-height: 8px;
+}
+
+.bar-day {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Badges Showcase */
+.badges-container {
+  background: #170d2b;
+  border: 1px solid rgba(255, 0, 127, 0.2);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.badge-item {
+  background: #21133a;
+  border: 1px solid rgba(255, 0, 127, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge-item.unlocked {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #271444 0%, #1a0b30 100%);
+}
+
+.badge-icon {
+  font-size: 24px;
+}
+
+.badge-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.badge-desc {
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.3;
+}
