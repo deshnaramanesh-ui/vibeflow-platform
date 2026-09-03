@@ -22,10 +22,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 3500);
   };
 
-  // UI Modal Openers
   window.openFocusModal = function () {
     const modal = document.getElementById('focus-timer-modal');
-    if (modal) modal.classList.add('active');
+    if (modal) {
+      modal.classList.add('active');
+      if (window.timer) {
+        window.timer.updateDisplay();
+        const startBtn = document.getElementById('btn-timer-toggle');
+        if (startBtn) {
+          if (window.timer.isRunning) {
+            startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Study Session';
+            startBtn.style.backgroundColor = '#d81b60';
+          } else if (window.timer.remainingSeconds < window.timer.totalDuration) {
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Resume Focus';
+            startBtn.style.backgroundColor = 'var(--primary-magenta)';
+          } else {
+            startBtn.innerHTML = '<i class="fas fa-play"></i> Start 30-Min Focus';
+            startBtn.style.backgroundColor = 'var(--primary-magenta)';
+          }
+        }
+      }
+    }
   };
 
   window.closeFocusModal = function () {

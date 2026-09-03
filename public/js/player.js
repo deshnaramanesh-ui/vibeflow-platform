@@ -195,6 +195,7 @@ class MusicPlayer {
     }
 
     this.updateHeartState(track);
+    this.updateStudyFocusState();
 
     // Record in Recently Played History
     if (window.API && window.API.recordSongPlayed) {
@@ -295,6 +296,45 @@ class MusicPlayer {
     }
   }
 
+  isStudyTrack(track) {
+    if (!track) return false;
+    const genre = (track.genre || '').toLowerCase();
+    const title = (track.title || '').toLowerCase();
+    const isStudyGenre =
+      genre.includes('study') ||
+      genre.includes('lo-fi') ||
+      genre.includes('lofi') ||
+      genre.includes('focus');
+    const isStudyPlaylist =
+      this.currentPlaylist &&
+      (this.currentPlaylist.slug === 'study-mix' ||
+        this.currentPlaylist.isFocusMode ||
+        (this.currentPlaylist.category || '').toLowerCase() === 'study' ||
+        (this.currentPlaylist.title || '').toLowerCase().includes('study'));
+    return isStudyGenre || isStudyPlaylist;
+  }
+
+  updateStudyFocusState() {
+    const isStudy = this.isStudyTrack(this.currentTrack);
+    const miniInd = document.getElementById('mini-focus-indicator');
+
+    if (isStudy) {
+      if (miniInd) miniInd.style.display = 'flex';
+      // Automatically advance focus timer ONLY when actively playing Study Mix
+      if (this.isPlaying && window.timer && !window.timer.isRunning) {
+        window.timer.startTimer(false);
+      } else if (!this.isPlaying && window.timer && window.timer.isRunning) {
+        window.timer.pauseTimer();
+      }
+    } else {
+      // Non-study categories (Relax, Sleep, Energy Boost, Travel, etc.)
+      if (miniInd) miniInd.style.display = 'none';
+      if (window.timer && window.timer.isRunning) {
+        window.timer.pauseTimer();
+      }
+    }
+  }
+
   updatePlayState(isPlaying) {
     this.isPlaying = isPlaying;
     if (this.elements.playBtn) {
@@ -302,6 +342,7 @@ class MusicPlayer {
         ? '<i class="fas fa-pause"></i>'
         : '<i class="fas fa-play" style="margin-left: 2px;"></i>';
     }
+    this.updateStudyFocusState();
   }
 
   playNext() {

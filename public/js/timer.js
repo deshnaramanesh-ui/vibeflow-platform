@@ -1,12 +1,12 @@
 // VibeFlow Study Mix Focus Timer & Gamification Rewards Engine
+// Strictly 30-Minute Automatic Star Reward Engine
 
 class FocusTimer {
   constructor() {
-    this.totalDuration = 30 * 60; // 30 minutes in seconds
+    this.totalDuration = 30 * 60; // Strictly 30 minutes (1800 seconds)
     this.remainingSeconds = this.totalDuration;
     this.timerInterval = null;
     this.isRunning = false;
-    this.activeMode = 30; // in minutes
     this.circleCircumference = 2 * Math.PI * 110; // r=110 => ~691
 
     this.initUI();
@@ -17,8 +17,6 @@ class FocusTimer {
     this.progressCircle = document.getElementById('timer-progress-ring');
     this.startBtn = document.getElementById('btn-timer-toggle');
     this.resetBtn = document.getElementById('btn-timer-reset');
-    this.claimBtn = document.getElementById('btn-timer-claim');
-    this.modeChips = document.querySelectorAll('.mode-chip');
     this.miniIndicator = document.getElementById('mini-focus-indicator');
     this.miniTime = document.getElementById('mini-focus-time');
 
@@ -30,21 +28,6 @@ class FocusTimer {
     if (this.startBtn) {
       this.startBtn.addEventListener('click', () => this.toggleTimer());
     }
-    if (this.resetBtn) {
-      this.resetBtn.addEventListener('click', () => this.resetTimer());
-    }
-    if (this.claimBtn) {
-      this.claimBtn.addEventListener('click', () => this.completeSession(true));
-    }
-
-    this.modeChips.forEach((chip) => {
-      chip.addEventListener('click', (e) => {
-        this.modeChips.forEach((c) => c.classList.remove('active'));
-        chip.classList.add('active');
-        const mins = Number(chip.dataset.mins);
-        this.setMode(mins);
-      });
-    });
 
     if (this.miniIndicator) {
       this.miniIndicator.addEventListener('click', () => {
@@ -55,38 +38,34 @@ class FocusTimer {
     this.updateDisplay();
   }
 
-  setMode(minutes) {
-    this.pauseTimer();
-    this.activeMode = minutes;
-    // If demo mode (0.083 mins = 5 secs)
-    if (minutes < 1) {
-      this.totalDuration = 5;
-    } else {
-      this.totalDuration = minutes * 60;
-    }
-    this.remainingSeconds = this.totalDuration;
-    this.updateDisplay();
-  }
-
   toggleTimer() {
     if (this.isRunning) {
-      this.pauseTimer();
+      this.pauseTimer(true);
     } else {
-      this.startTimer();
+      this.startTimer(true);
+      if (window.player && !window.player.isPlaying) {
+        window.player.play();
+      }
     }
   }
 
-  startTimer() {
+  startTimer(autoPlayMusic = true) {
     if (this.isRunning) return;
-    this.isRunning = true;
 
-    // Also auto-play Study Mix music if not already playing
-    if (window.player && !window.player.isPlaying) {
-      const studyPlaylist = window.allPlaylists?.find((p) => p.slug === 'study-mix') || window.allPlaylists?.[0];
-      if (studyPlaylist) {
-        window.player.loadPlaylist(studyPlaylist, 0, true);
+    // If starting timer from modal and player is not playing study mix, switch to Study Mix & Play
+    if (autoPlayMusic && window.player) {
+      const isCurrentlyStudy = window.player.isStudyTrack?.(window.player.currentTrack);
+      if (!isCurrentlyStudy) {
+        const studyPlaylist = window.allPlaylists?.find((p) => p.slug === 'study-mix') || window.allPlaylists?.[0];
+        if (studyPlaylist) {
+          window.player.loadPlaylist(studyPlaylist, 0, true);
+        }
+      } else if (!window.player.isPlaying) {
+        window.player.play();
       }
     }
+
+    this.isRunning = true;
 
     if (this.startBtn) {
       this.startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause Study Session';
@@ -98,20 +77,37 @@ class FocusTimer {
     }
 
     this.timerInterval = setInterval(() => {
+      // Check if user paused or switched away from Study Mix
+      if (window.player) {
+        const isStudy = window.player.isStudyTrack?.(window.player.currentTrack);
+        if (!window.player.isPlaying || !isStudy) {
+          this.pauseTimer(false);
+          if (!isStudy && this.miniIndicator) {
+            this.miniIndicator.style.display = 'none';
+          }
+          return;
+        }
+      }
+
       if (this.remainingSeconds > 0) {
         this.remainingSeconds -= 1;
         this.updateDisplay();
       } else {
+        // 30 Minutes completed automatically!
         this.completeSession();
       }
     }, 1000);
   }
 
-  pauseTimer() {
+  pauseTimer(pauseMusic = false) {
     this.isRunning = false;
     if (this.timerInterval) {
       clearInterval(this.timerInterval);
       this.timerInterval = null;
+    }
+
+    if (pauseMusic && window.player && window.player.isPlaying) {
+      window.player.pause();
     }
 
     if (this.startBtn) {
@@ -121,15 +117,12 @@ class FocusTimer {
   }
 
   resetTimer() {
-    this.pauseTimer();
-    if (this.activeMode < 1) {
-      this.totalDuration = 5;
-    } else {
-      this.totalDuration = this.activeMode * 60;
-    }
+    this.pauseTimer(true);
+    this.totalDuration = 30 * 60;
     this.remainingSeconds = this.totalDuration;
     if (this.startBtn) {
       this.startBtn.innerHTML = '<i class="fas fa-play"></i> Start 30-Min Focus';
+      this.startBtn.style.backgroundColor = 'var(--primary-magenta)';
     }
     this.updateDisplay();
   }
@@ -153,17 +146,16 @@ class FocusTimer {
     }
   }
 
-  async completeSession(manualClaim = false) {
-    this.pauseTimer();
+  async completeSession() {
+    this.pauseTimer(false);
     this.remainingSeconds = 0;
     this.updateDisplay();
 
     // Play celebration audio chime
     this.playCelebrationSound();
 
-    // Call API backend to record session in MongoDB and award Star ⭐
-    const duration = this.activeMode < 1 ? 30 : this.activeMode;
-    const res = await window.API.completeFocusSession(duration, '66b200000000000000000001');
+    // Automatically award 1 Star for 30 minutes in MongoDB
+    const res = await window.API.completeFocusSession(30, '66b200000000000000000001');
 
     if (res.success) {
       // Update global user stats in UI
@@ -173,10 +165,12 @@ class FocusTimer {
 
       // Show Star Celebration Modal
       this.showCelebrationModal(res.starsEarned || 1, res.user);
+      window.showToast?.('🎉 30 minutes completed! +1 ⭐ Star Earned!');
     } else {
-      window.showToast?.('Session recorded!');
+      window.showToast?.('Session completed!');
     }
 
+    // Reset back to 30:00 for the next focus block
     this.resetTimer();
   }
 
@@ -184,9 +178,13 @@ class FocusTimer {
     const modal = document.getElementById('star-celebration-modal');
     if (!modal) return;
 
-    document.getElementById('earned-stars-count').textContent = `+${starsEarned} ⭐ Star Earned!`;
-    document.getElementById('celebration-streak-val').textContent = `🔥 ${user?.currentStreak || 4} Days`;
-    document.getElementById('celebration-today-stars').textContent = `⭐ ${user?.starsToday || 4} Today`;
+    const countEl = document.getElementById('earned-stars-count');
+    const streakEl = document.getElementById('celebration-streak-val');
+    const todayStarsEl = document.getElementById('celebration-today-stars');
+
+    if (countEl) countEl.textContent = `+${starsEarned} ⭐ Star Earned!`;
+    if (streakEl) streakEl.textContent = `🔥 ${user?.currentStreak || 1} Days`;
+    if (todayStarsEl) todayStarsEl.textContent = `⭐ ${user?.starsToday || 1} Today`;
 
     modal.classList.add('active');
   }

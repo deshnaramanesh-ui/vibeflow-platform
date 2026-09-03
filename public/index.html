@@ -147,7 +147,7 @@
 
       <!-- Right Focus Timer Indicator & Volume -->
       <div class="player-right-controls">
-        <div class="mini-focus-indicator" id="mini-focus-indicator" title="Study Mix Timer Active! Click to expand">
+        <div class="mini-focus-indicator" id="mini-focus-indicator" style="display: none;" title="Study Mix Focus Mode Active! Click to expand">
           <i class="fa-solid fa-stopwatch" style="color: #ff007f;"></i>
           <span id="mini-focus-time">30:00</span>
         </div>
@@ -482,17 +482,9 @@
         <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px;">
-        Listen to soft lo-fi beats while studying. For every <strong>30 minutes</strong> of focus, you will earn <strong>+1 ⭐ Star</strong>!
+      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">
+        Listen to soft lo-fi beats while studying. For every <strong>30 minutes</strong> of focus completed, you will automatically earn <strong>+1 ⭐ Star</strong>!
       </p>
-
-      <!-- Preset Modes -->
-      <div class="preset-modes-wrap">
-        <button class="mode-chip active" data-mins="30">30 Min Focus (1 ⭐)</button>
-        <button class="mode-chip" data-mins="50">50 Min Deep Study (2 ⭐)</button>
-        <button class="mode-chip" data-mins="25">25 Min Pomodoro (1 ⭐)</button>
-        <button class="mode-chip demo-chip" data-mins="0.083" title="5-second timer for instant grading / presentation demo!">⚡ 5s Fast Demo Mode</button>
-      </div>
 
       <!-- Circular SVG Countdown Ring -->
       <div class="timer-container">
@@ -510,26 +502,20 @@
 
         <div class="timer-center-text">
           <div class="timer-digits" id="timer-digits">30:00</div>
-          <div class="timer-label">Deep Focus</div>
+          <div class="timer-label">Study Mix Focus</div>
         </div>
       </div>
 
       <!-- Timer Action Buttons -->
-      <div class="timer-action-buttons">
-        <button class="btn btn-primary btn-timer-primary" id="btn-timer-toggle">
+      <div class="timer-action-buttons" style="display: flex; justify-content: center;">
+        <button class="btn btn-primary btn-timer-primary" id="btn-timer-toggle" style="width: 100%; max-width: 280px; padding: 14px; font-size: 15px;">
           <i class="fa-solid fa-play"></i> Start 30-Min Focus
-        </button>
-        <button class="btn btn-timer-secondary" id="btn-timer-reset">
-          <i class="fa-solid fa-rotate-left"></i> Reset
-        </button>
-        <button class="btn btn-timer-secondary" id="btn-timer-claim" style="border-color: #ffd700; color: #ffd700;" title="Instantly complete session and claim star">
-          <i class="fa-solid fa-star"></i> Claim Star
         </button>
       </div>
 
-      <div class="focus-reward-info">
-        <span>Active Track: <strong>Midnight Focus & Coffee</strong></span>
-        <span class="focus-reward-stars"><i class="fa-solid fa-award"></i> Reward: +1 ⭐ Star</span>
+      <div class="focus-reward-info" style="margin-top: 20px;">
+        <span>Session: <strong>30 Minutes</strong></span>
+        <span class="focus-reward-stars"><i class="fa-solid fa-award"></i> Reward: +1 ⭐ Star per 30m</span>
       </div>
     </div>
   </div>
@@ -613,12 +599,9 @@
         </div>
       </div>
 
-      <!-- Reset / Fresh Start Controls -->
-      <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,0,127,0.15); padding-top: 14px;">
-        <span style="font-size: 12px; color: var(--text-dim);">Earn +1 ⭐ Star every 30 mins of Study Mix.</span>
-        <button type="button" class="btn btn-outline" id="btn-reset-stars" style="font-size: 12px; padding: 6px 14px;">
-          <i class="fa-solid fa-rotate-left"></i> Reset Stars & Streak to 0
-        </button>
+      <!-- Focus Motivation footer -->
+      <div style="margin-top: 18px; text-align: center; border-top: 1px solid rgba(255,0,127,0.15); padding-top: 14px;">
+        <span style="font-size: 13px; color: var(--text-dim);"><i class="fa-solid fa-star" style="color: #ffd700;"></i> Earn 1 ⭐ Star for every 30 minutes of completed Study Mix focus!</span>
       </div>
     </div>
   </div>
