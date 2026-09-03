@@ -1325,3 +1325,322 @@ input:checked + .slider:before {
   transform: translateY(0);
   opacity: 1;
 }
+
+/* ==========================================================================
+   Mobile Sidebar Overlay & Hamburger Toggle
+   ========================================================================== */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: rgba(255, 0, 127, 0.15);
+  border: 1px solid rgba(255, 0, 127, 0.4);
+  color: #ffffff;
+  font-size: 18px;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.mobile-menu-btn:hover {
+  background: var(--primary-neon);
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.6);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints for Tablets & Mobile Devices
+   ========================================================================== */
+@media (max-width: 900px) {
+  .playlists-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  #app-container {
+    width: 100vw;
+    max-width: 100vw;
+    overflow-x: hidden;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  /* Slide-in Mobile Drawer Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 82vw;
+    height: 100vh;
+    z-index: 1100;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 6px 0 30px rgba(0, 0, 0, 0.85);
+    background-color: #0d0617;
+    border-right: 1px solid var(--primary-neon);
+    padding: 24px 16px 90px 16px;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Main Viewport Content */
+  .main-wrapper {
+    width: 100%;
+    max-width: 100vw;
+    margin-left: 0;
+    overflow-x: hidden;
+  }
+
+  .top-navbar {
+    padding: 12px 14px;
+    gap: 10px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+
+  .search-container {
+    flex: 1;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .search-input {
+    padding: 10px 14px 10px 38px;
+    font-size: 13px;
+  }
+
+  .auth-actions .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .content-scroll {
+    padding: 14px 14px 150px 14px;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Hero Banner Stacking */
+  .hero-banner {
+    padding: 24px 16px;
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 22px;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+    max-width: 100%;
+    margin-bottom: 18px;
+  }
+
+  .hero-btn-group {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-btn,
+  .hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 12px 16px;
+  }
+
+  /* 2-Column Mobile Grid for Categories */
+  .playlists-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .playlist-card {
+    padding: 10px;
+  }
+
+  .playlist-card .card-image-wrap img {
+    height: 130px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-desc {
+    font-size: 11px;
+  }
+
+  /* Responsive Bottom Music Player Bar */
+  .music-player-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: auto;
+    min-height: 80px;
+    padding: 8px 12px 12px 12px;
+    flex-wrap: wrap;
+    gap: 6px;
+    z-index: 1000;
+    background: rgba(14, 8, 26, 0.98);
+    backdrop-filter: blur(16px);
+    box-sizing: border-box;
+  }
+
+  .player-left {
+    flex: 1;
+    min-width: 140px;
+    gap: 8px;
+  }
+
+  .player-thumb {
+    width: 42px;
+    height: 42px;
+  }
+
+  .player-title {
+    font-size: 13px;
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .player-artist {
+    font-size: 11px;
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .player-center {
+    width: 100%;
+    order: 3;
+    margin: 2px 0 0 0;
+  }
+
+  .player-right-controls {
+    flex: 0 0 auto;
+    order: 2;
+    gap: 8px;
+  }
+
+  .volume-container {
+    display: none;
+  }
+
+  .mini-focus-indicator {
+    padding: 4px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .progress-container {
+    gap: 8px;
+  }
+
+  .time-label {
+    font-size: 10px;
+    min-width: 28px;
+  }
+
+  /* Modals on Mobile */
+  .modal-overlay {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .modal-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 18px 14px;
+    max-height: 90vh;
+    border-radius: 18px 18px 0 0;
+    overflow-y: auto;
+  }
+
+  .modal-title {
+    font-size: 16px;
+  }
+
+  .track-table th:nth-child(3),
+  .track-table td:nth-child(3),
+  .track-table th:nth-child(4),
+  .track-table td:nth-child(4) {
+    display: none; /* Hide Album & Genre on small mobile screens to prevent overflow */
+  }
+
+  .timer-container {
+    width: 200px;
+    height: 200px;
+    margin: 10px auto;
+  }
+
+  .timer-digits {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-title {
+    font-size: 19px;
+  }
+
+  .playlist-card .card-image-wrap img {
+    height: 110px;
+  }
+
+  .playlists-grid {
+    gap: 8px;
+  }
+
+  .auth-actions {
+    display: none; /* Accessible directly inside the slide-in mobile navigation drawer */
+  }
+
+  .player-title,
+  .player-artist {
+    max-width: 95px;
+  }
+}

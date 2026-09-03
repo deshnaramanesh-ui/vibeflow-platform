@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>VibeFlow - Student Music Streaming & Focus Platform</title>
   <meta name="description" content="VibeFlow is a student music streaming platform with Study Mix Pomodoro focus mode, 30-minute Star rewards, Spotify settings, and streak tracking dashboard." />
 
@@ -54,10 +54,16 @@
       </div>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
     <!-- Main Application Wrapper -->
     <main class="main-wrapper">
       <!-- Top Navigation Bar (Exact Match) -->
       <header class="top-navbar">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" title="Open Menu" aria-label="Toggle navigation menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
         <div class="search-container">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
           <input

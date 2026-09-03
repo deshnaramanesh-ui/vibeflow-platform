@@ -644,6 +644,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
+  // Mobile Navigation Drawer Toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const sidebar = document.querySelector('.sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+  function toggleMobileMenu(open) {
+    if (sidebar) sidebar.classList.toggle('mobile-open', open);
+    if (sidebarOverlay) sidebarOverlay.classList.toggle('active', open);
+  }
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    const isOpen = sidebar?.classList.contains('mobile-open');
+    toggleMobileMenu(!isOpen);
+  });
+
+  sidebarOverlay?.addEventListener('click', () => toggleMobileMenu(false));
+
+  // Auto-close mobile drawer when tapping any navigation link
+  document.querySelectorAll('.sidebar .nav-link, .sidebar-streak-card').forEach((el) => {
+    el.addEventListener('click', () => toggleMobileMenu(false));
+  });
+
   // Bind Header & Sidebar Buttons
   document.getElementById('btn-login')?.addEventListener('click', () => window.openAuthModal(false));
   document.getElementById('btn-register')?.addEventListener('click', () => window.openAuthModal(true));
